@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Aquí puedes definir los colores que usarás en tu app -->
+    <color name="colorPrimary">#6200EE</color> <!-- Ejemplo: un color morado. ¡Cámbialo por el que quieras! -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
