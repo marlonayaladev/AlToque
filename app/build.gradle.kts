@@ -71,10 +71,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("com.airbnb.android:lottie:6.1.0")
 
     // --- DEPENDENCIAS REDUNDANTES O INNECESARIAS (las hemos quitado) ---
     // implementation(libs.androidx.appcompat) // No es estrictamente necesario para una app 100% Compose
     // implementation(libs.material) // Redundante, ya la declaramos arriba sin alias
     // implementation(libs.androidx.activity) // Redundante, activity-compose ya la incluye
     // implementation(libs.androidx.constraintlayout) // Para vistas XML, no para Compose
+
 }

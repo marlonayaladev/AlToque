@@ -1,25 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Splashscreem" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
 
-    <!-- Tema principal de tu app (sin cambios) -->
-    <style name="Theme.AlToque" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Splashscreem" parent="Base.Theme.Splashscreem" />
 
-    <!--
-        TEMA PARA LA SPLASH ACTIVITY (VERSIÓN A PRUEBA DE ERRORES)
-        Usamos "Theme.SplashScreen" que es el más básico y no debería fallar.
-    -->
-    <style name="Theme.App.Splash" parent="Theme.SplashScreen">
-        <!-- Color de fondo de la ventana -->
-        <item name="windowSplashScreenBackground">@android:color/black</item>
-
-        <!-- Duración del ícono (lo ponemos a 0 para que no se vea) -->
-        <item name="windowSplashScreenAnimationDuration">0</item>
-
-        <!-- Ícono del sistema (lo dejamos transparente por si acaso) -->
-        <item name="windowSplashScreenAnimatedIcon">@android:color/transparent</item>
-
-        <!-- Tema que se usará DESPUÉS de la splash screen -->
-        <item name="postSplashScreenTheme">@style/Theme.AlToque</item>
+    <style name="Theme.Splashscreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#00BCD4</item>
+        <item name="colorPrimaryVariant">#008BA3</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="android:statusBarColor">#00BCD4</item>
+        <item name="android:windowBackground">#00BCD4</item>
     </style>
 
 </resources>
