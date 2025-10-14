@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "909132226943",
+    "project_id": "miappaltoque",
+    "storage_bucket": "miappaltoque.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909132226943:android:fc885a1b99c5252e78fa4a",
+        "android_client_info": {
+          "package_name": "com.company.altoque"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909132226943-biaf48sdilu837i5afpl7f4sckel2rni.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKbAbvKlv0XzzZ4glzuxEJobeaObgpHxM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909132226943-biaf48sdilu837i5afpl7f4sckel2rni.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
