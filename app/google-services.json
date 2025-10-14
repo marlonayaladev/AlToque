@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:909132226943:android:fc885a1b99c5252e78fa4a",
+        "mobilesdk_app_id": "1:909132226943:android:30ad6b03fec74a7778fa4a",
         "android_client_info": {
-          "package_name": "com.company.altoque"
+          "package_name": "com.example.altoque"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "909132226943-22j34l0a5tull94npk4jlcf3vb5ufffi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.altoque",
+            "certificate_hash": "3e21775e736ff4706e451a0e3ea7ed352a8fc083"
+          }
+        },
         {
           "client_id": "909132226943-biaf48sdilu837i5afpl7f4sckel2rni.apps.googleusercontent.com",
           "client_type": 3

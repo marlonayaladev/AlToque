@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
+import com.example.altoque.RegisterMethodActivity
 
 class SplashActivity : AppCompatActivity() {
 
@@ -57,7 +58,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        val intent = Intent(this, MainActivity::class.java)
+        // 1. Cambia MainActivity::class.java por RegisterMethodActivity::class.java
+        val intent = Intent(this, RegisterMethodActivity::class.java)
+
         startActivity(intent)
         finish()
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

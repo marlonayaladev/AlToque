@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">AlToque</string>
+    <string name="desc_workers_handshake">Ilustración de dos trabajadores dándose la mano en señal de acuerdo.</string>
+    <string name="title_onboarding">El texto de tu título aquí.</string>
+    <string name="button_continue_phone">Continuar con Teléfono</string>
+    <string name="button_continue_google">Continuar con Google</string>
+    <string name="default_web_client_id">909132226943-biaf48sdilu837i5afpl7f4sckel2rni.apps.googleusercontent.com</string>
 </resources>
+
+

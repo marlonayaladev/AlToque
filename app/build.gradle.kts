@@ -1,9 +1,8 @@
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -42,34 +41,45 @@ android {
 }
 
 dependencies {
-    // --- DEPENDENCIAS ESENCIALES PARA COMPOSE Y LA APP ---
+
+    // Asegúrate de que esta sea la UNICA versión BOM definida
+    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
+
+    // --- DEPENDENCIAS BÁSICAS Y ANDROIDX VIEWS ---
     implementation(libs.androidx.core.ktx)
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
+
+    // Compatibilidad con ConstraintLayout
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // --- FIREBASE Y AUTENTICACIÓN ---
+    // Usar la BOM (Bill of Materials) para gestionar todas las versiones de Firebase
+    implementation(platform(libs.firebase.bom))
+
+    // Dependencias específicas de Firebase
+    implementation("com.google.firebase:firebase-firestore-ktx") // Firestore
+    implementation("com.google.firebase:firebase-auth-ktx") // Autenticación (Google y Teléfono)
+    implementation("com.google.android.gms:play-services-auth:20.7.0") // Google Sign In Services
+
+    // Kotlin Extensions (Usando la sintaxis de comillas dobles que es compatible con KTS)
+    implementation("androidx.core:core-ktx:1.9.0")
+
+
+    // --- DEPENDENCIAS DE COMPOSE ---
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom)) // BOM para gestionar versiones de Compose
-    // Import the BoM for the Firebase platform
-    implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
-
-    // Add the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-auth")
-
-    // --- DEPENDENCIAS DE UI CON COMPOSE ---
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3) // Material 3 para Compose (recomendado)
+    implementation(libs.androidx.material3)
 
-    // --- DEPENDENCIAS PARA LA SPLASH SCREEN (LA CLAVE DEL PROBLEMA) ---
-    // 1. La API de Splash Screen
+    // --- OTRAS DEPENDENCIAS ---
     implementation("androidx.core:core-splashscreen:1.0.1")
-    // 2. La librería de Material Components (XML) que CONTIENE el tema "Theme.SplashScreen.Icon"
-    implementation("com.google.android.material:material:1.12.0")
-
-    // --- DEPENDENCIA PARA LA ANIMACIÓN LOTTIE ---
     implementation("com.airbnb.android:lottie-compose:6.4.0")
 
-    // --- DEPENDENCIAS PARA TESTING (sin cambios) ---
+    // --- DEPENDENCIAS PARA TESTING ---
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,12 +87,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("com.airbnb.android:lottie:6.1.0")
-
-    // --- DEPENDENCIAS REDUNDANTES O INNECESARIAS (las hemos quitado) ---
-    // implementation(libs.androidx.appcompat) // No es estrictamente necesario para una app 100% Compose
-    // implementation(libs.material) // Redundante, ya la declaramos arriba sin alias
-    // implementation(libs.androidx.activity) // Redundante, activity-compose ya la incluye
-    // implementation(libs.androidx.constraintlayout) // Para vistas XML, no para Compose
-
 }
