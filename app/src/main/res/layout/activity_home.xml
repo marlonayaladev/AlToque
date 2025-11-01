@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2C2C2C">
+
+    <!-- Barra de búsqueda superior -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/iconLeft"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_menu_search"
+            android:tint="#00BCD4"
+            android:layout_marginEnd="12dp"/>
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/editbox_background"
+            android:hint="Buscar..."
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColorHint="#888888"
+            android:textColor="#FFFFFF"/>
+
+        <ImageView
+            android:id="@+id/iconRight"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_robot"
+            android:layout_marginStart="12dp"/>
+
+    </LinearLayout>
+
+    <!-- Vista de las bolas animadas -->
+    <com.example.omg.AnimatedCirclesView
+        android:id="@+id/animatedCirclesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:layout_above="@id/bottomNav"/>
+
+    <!-- Barra de navegación inferior -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_chat_inicio"
+            android:tint="#666666"
+            android:scaleType="centerInside"/>
+
+        <ImageView
+            android:id="@+id/navProfile"
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_user"
+            android:tint="#00BCD4"
+            android:scaleType="centerInside"/>
+
+        <ImageView
+            android:id="@+id/navNotifications"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_popup_reminder"
+            android:tint="#666666"
+            android:scaleType="centerInside"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
