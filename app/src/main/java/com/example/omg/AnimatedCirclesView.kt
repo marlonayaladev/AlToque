@@ -3,6 +3,8 @@ package com.example.omg
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
@@ -38,7 +40,8 @@ class AnimatedCirclesView @JvmOverloads constructor(
         var x: Float,
         var y: Float,
         var alpha: Float = 1f,
-        var text: String = ""
+        var text: String = "",
+        var iconResId: Int? = null
     )
     private val circles = mutableListOf<Circle>()
 
@@ -46,7 +49,6 @@ class AnimatedCirclesView @JvmOverloads constructor(
     private var centerX = 0f
     private var centerY = 0f
 
-    // 🆕 Servicios favoritos del usuario
     private var favoriteServices = listOf<String>()
 
     init {
@@ -58,11 +60,28 @@ class AnimatedCirclesView @JvmOverloads constructor(
         }
     }
 
-    // 🆕 Función para establecer los servicios favoritos
     fun setFavoriteServices(services: List<String>) {
         favoriteServices = services
         invalidate()
     }
+
+    private fun getIconForService(service: String): Int? {
+        return when (service) {
+            "Gasfitería"     -> R.drawable.ic_gasfiteria
+            "Electricidad"   -> R.drawable.ic_electricidad
+            "Carpintería"    -> R.drawable.ic_pintura
+            "Pintura"        -> R.drawable.ic_pintura
+            "Limpieza"       -> R.drawable.ic_limpieza
+            "Jardinería"     -> R.drawable.ic_jardineria
+            "Cerrajería"     -> R.drawable.ic_cerrajeria
+            "Mecánica"       -> R.drawable.ic_mecanica
+            "Informática"    -> R.drawable.ic_informatica
+            "Manicure"       -> R.drawable.ic_manicurista
+            else -> null // si no hay ícono definido
+        }
+    }
+
+
 
     private fun startAnimation() {
         val animator = ValueAnimator.ofFloat(0f, 1f)
@@ -120,17 +139,16 @@ class AnimatedCirclesView @JvmOverloads constructor(
                 circles.add(Circle(centerX, centerY + spacing))
             }
             else -> {
-                // 🆕 Asignar los servicios favoritos a las 4 bolas laterales
                 val service1 = if (favoriteServices.size > 0) favoriteServices[0] else "Servicio 1"
                 val service2 = if (favoriteServices.size > 1) favoriteServices[1] else "Servicio 2"
                 val service3 = if (favoriteServices.size > 2) favoriteServices[2] else "Servicio 3"
                 val service4 = if (favoriteServices.size > 3) favoriteServices[3] else "Servicio 4"
 
-                circles.add(Circle(centerX, centerY - spacing, text = service1))
-                circles.add(Circle(centerX - spacing, centerY, text = service2))
+                circles.add(Circle(centerX, centerY - spacing, text = service1, iconResId = getIconForService(service1)))
+                circles.add(Circle(centerX - spacing, centerY, text = service2, iconResId = getIconForService(service2)))
                 circles.add(Circle(centerX, centerY, text = "¿Qué servicio\nnecesitas?"))
-                circles.add(Circle(centerX + spacing, centerY, text = service3))
-                circles.add(Circle(centerX, centerY + spacing, text = service4))
+                circles.add(Circle(centerX + spacing, centerY, text = service3, iconResId = getIconForService(service3)))
+                circles.add(Circle(centerX, centerY + spacing, text = service4, iconResId = getIconForService(service4)))
             }
         }
     }
@@ -142,17 +160,23 @@ class AnimatedCirclesView @JvmOverloads constructor(
             paint.alpha = (circle.alpha * 255).toInt()
             canvas.drawCircle(circle.x, circle.y, circleRadius, paint)
 
-            if (circle.text.isNotEmpty() && animationFinished) {
+            circle.iconResId?.let { resId ->
+                val bitmap = BitmapFactory.decodeResource(resources, resId)
+                val scaledBitmap = Bitmap.createScaledBitmap(bitmap, (circleRadius * 2.1f).toInt(), (circleRadius * 2.1f).toInt(), true)
+                canvas.drawBitmap(scaledBitmap, circle.x - scaledBitmap.width / 2f, circle.y - scaledBitmap.height / 2f, null)
+            }
+
+            if (circle.text.isNotEmpty() && animationFinished && circle.iconResId == null) {
                 val lines = circle.text.split("\n")
                 var yOffset = circle.y - (lines.size - 1) * 18f
 
                 for (line in lines) {
-                    // 🆕 Ajustar tamaño de texto según longitud
                     textPaint.textSize = if (line.length > 12) 28f else 32f
                     canvas.drawText(line, circle.x, yOffset, textPaint)
                     yOffset += 36f
                 }
             }
+
         }
     }
 
@@ -166,12 +190,10 @@ class AnimatedCirclesView @JvmOverloads constructor(
                 val distance = Math.sqrt((dx * dx + dy * dy).toDouble()).toFloat()
 
                 if (distance <= circleRadius) {
-                    // 🆕 Abrir pantalla de ubicación con el servicio seleccionado
                     val serviceName = when (index) {
                         0 -> if (favoriteServices.size > 0) favoriteServices[0] else "Servicio"
                         1 -> if (favoriteServices.size > 1) favoriteServices[1] else "Servicio"
                         2 -> {
-                            // Botón central - Ver todos los servicios
                             Toast.makeText(context, "Ver todos los servicios", Toast.LENGTH_SHORT).show()
                             return true
                         }
@@ -180,7 +202,6 @@ class AnimatedCirclesView @JvmOverloads constructor(
                         else -> "Servicio"
                     }
 
-                    // Abrir LocationConfirmationActivity
                     val intent = Intent(context, LocationConfirmationActivity::class.java).apply {
                         putExtra("SERVICE_NAME", serviceName)
                     }

@@ -1,9 +1,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- 🌐 Tema base de la aplicación -->
     <style name="Base.Theme.OMG" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Fondo que se verá antes de cualquier actividad -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!-- 🔥 Desactiva splash automático en Android 12+ -->
+        <item name="android:windowSplashScreenAnimatedIcon">@null</item>
+        <item name="android:windowSplashScreenBackground">@android:color/transparent</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
     </style>
 
+    <!-- Tema principal de la app -->
     <style name="Theme.OMG" parent="Base.Theme.OMG" />
+
+    <!-- 🚀 Tema exclusivo para SplashActivity -->
+    <style name="Theme.SplashInstant" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Fondo igual al splash para evitar parpadeo -->
+        <item name="android:windowBackground">#00BCD4</item>
+
+        <!-- Opcional: si tu layout ya tiene fondo -->
+        <!-- <item name="android:windowBackground">@android:color/transparent</item> -->
+
+        <!-- Elimina decoraciones del sistema -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+
+        <!-- 🔥 Desactiva splash automático en Android 12+ -->
+        <item name="android:windowSplashScreenAnimatedIcon">@null</item>
+        <item name="android:windowSplashScreenBackground">@android:color/transparent</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+    </style>
+
 </resources>
