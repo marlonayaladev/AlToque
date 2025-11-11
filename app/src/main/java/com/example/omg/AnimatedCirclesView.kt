@@ -75,7 +75,7 @@ class AnimatedCirclesView @JvmOverloads constructor(
             "Jardinería"     -> R.drawable.ic_jardineria
             "Cerrajería"     -> R.drawable.ic_cerrajeria
             "Mecánica"       -> R.drawable.ic_mecanica
-            "Informática"    -> R.drawable.ic_informatica
+            "Técnico"    -> R.drawable.ic_informatica
             "Manicure"       -> R.drawable.ic_manicurista
             else -> null // si no hay ícono definido
         }
@@ -151,7 +151,7 @@ class AnimatedCirclesView @JvmOverloads constructor(
                 circles.add(Circle(centerX, centerY + spacing, text = service4, iconResId = getIconForService(service4)))
             }
         }
-    }
+    }g
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -170,11 +170,7 @@ class AnimatedCirclesView @JvmOverloads constructor(
                 val lines = circle.text.split("\n")
                 var yOffset = circle.y - (lines.size - 1) * 18f
 
-                for (line in lines) {
-                    textPaint.textSize = if (line.length > 12) 28f else 32f
-                    canvas.drawText(line, circle.x, yOffset, textPaint)
-                    yOffset += 36f
-                }
+
             }
 
         }
