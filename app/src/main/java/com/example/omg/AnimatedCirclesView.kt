@@ -146,12 +146,13 @@ class AnimatedCirclesView @JvmOverloads constructor(
 
                 circles.add(Circle(centerX, centerY - spacing, text = service1, iconResId = getIconForService(service1)))
                 circles.add(Circle(centerX - spacing, centerY, text = service2, iconResId = getIconForService(service2)))
-                circles.add(Circle(centerX, centerY, text = "¿Qué servicio\nnecesitas?"))
+                // foto central de buscar servicios
+                circles.add(Circle(centerX, centerY, iconResId = R.drawable.ic_buscar_servicios))
                 circles.add(Circle(centerX + spacing, centerY, text = service3, iconResId = getIconForService(service3)))
                 circles.add(Circle(centerX, centerY + spacing, text = service4, iconResId = getIconForService(service4)))
             }
         }
-    }g
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
