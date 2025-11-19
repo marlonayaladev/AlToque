@@ -11,6 +11,12 @@ class PromoTrabajadorActivity : AppCompatActivity() {
         setContentView(R.layout.activity_promo_trabajador)
 
         val btnConvertirse = findViewById<Button>(R.id.btnConvertirse)
+        btnConvertirse.setOnClickListener {
+            val intent = Intent(this, FormularioRegistroActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
         val btnRegresar = findViewById<Button>(R.id.btnRegresar)
 
         btnConvertirse.setOnClickListener {
