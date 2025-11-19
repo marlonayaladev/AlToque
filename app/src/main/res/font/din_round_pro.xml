@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/dinroundpro" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="500"
+        android:font="@font/dinroundpro_medi" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="700"
+        android:font="@font/dinroundpro_bold" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="900"
+        android:font="@font/dinroundpro_black" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="300"
+        android:font="@font/dinroundpro_light" />
+</font-family>

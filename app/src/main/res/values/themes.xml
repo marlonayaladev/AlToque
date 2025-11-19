@@ -9,6 +9,9 @@
         <item name="android:windowSplashScreenAnimatedIcon">@null</item>
         <item name="android:windowSplashScreenBackground">@android:color/transparent</item>
         <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+
+        <!-- ✅ Fuente por defecto para toda la app -->
+        <item name="android:fontFamily">@font/din_round_pro</item>
     </style>
 
     <!-- Tema principal de la app -->

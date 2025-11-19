@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -51,6 +52,10 @@
         <activity android:name=".RatingActivity" android:exported="false" android:screenOrientation="portrait"/>
         <activity android:name=".EditServicesActivity" android:exported="false" android:screenOrientation="portrait"/>
         <activity android:name=".SearchActivity" android:exported="false" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
+
+        <!-- Nuevas actividades para validación facial -->
+        <activity android:name=".PromoTrabajadorActivity" android:exported="true" android:screenOrientation="portrait"/>
+        <activity android:name=".FaceValidationActivity" android:exported="true" android:screenOrientation="portrait"/>
 
     </application>
 

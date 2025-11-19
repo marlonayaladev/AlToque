@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Fondo completo -->
+
+    <!-- Encabezado: logo + texto -->
+    <ImageView
+        android:id="@+id/promoImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/fondoaltq"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <LinearLayout
+        android:id="@+id/headerPromo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp">
+
+        <ImageView
+            android:id="@+id/logoPromo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_logo"
+
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/textPromoHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Al toque"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/din_round_pro"
+            android:alpha="0.85" />
+    </LinearLayout>
+
+    <!-- Texto principal -->
+
+    <!-- Lista de beneficios -->
+
+    <!-- Botón Convertirse -->
+
+    <!-- Botón Regresar -->
+
+    <TextView
+        android:id="@+id/textPromoMain"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:fontFamily="@font/din_round_pro"
+        android:text="Obtén 50% más ingresos con tus servicios"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerPromo" />
+
+    <TextView
+        android:id="@+id/textPromoBenefits"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        android:fontFamily="@font/din_round_pro"
+        android:lineSpacingExtra="14dp"
+        android:text=" Gana más por tu talento\n Trabajo al instante\n Tu propio horario\n Verificación rápida y segura"
+    android:layout_marginLeft="13dp"
+
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textPromoMain" />
+
+    <Button
+        android:id="@+id/btnConvertirse"
+        android:layout_width="272dp"
+        android:layout_height="94dp"
+        android:layout_marginBottom="28dp"
+        android:backgroundTint="#00BCD4"
+        android:fontFamily="@font/din_round_pro"
+        android:text="Convertirse en trabajador"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/btnRegresar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnRegresar"
+        android:layout_width="173dp"
+        android:layout_height="77dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#555555"
+        android:fontFamily="@font/din_round_pro"
+        android:text="Regresar"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

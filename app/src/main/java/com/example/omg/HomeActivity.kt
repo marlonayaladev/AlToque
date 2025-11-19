@@ -56,7 +56,14 @@ class HomeActivity : AppCompatActivity() {
         navProfile = findViewById(R.id.navProfile)
         navNotifications = findViewById(R.id.navNotifications)
         animatedCirclesView = findViewById(R.id.animatedCirclesView)
+
+        // Acción directa desde initViews (opcional)
+        iconLeft.setOnClickListener {
+            val intent = Intent(this, PromoTrabajadorActivity::class.java)
+            startActivity(intent)
+        }
     }
+
 
     private fun setupListeners() {
         // ❌ QUITAR ESTO (comentado por si lo necesitas después)
@@ -74,11 +81,6 @@ class HomeActivity : AppCompatActivity() {
         searchBar.isFocusableInTouchMode = false
         searchBar.isClickable = true
 
-        // El ícono izquierdo (iconLeft) queda libre para otra función
-        iconLeft.setOnClickListener {
-            Toast.makeText(this, "Función pendiente", Toast.LENGTH_SHORT).show()
-            // TODO: Aquí pondrás tu nueva función
-        }
 
         iconRight.setOnClickListener {
             Toast.makeText(this, "Actualizar", Toast.LENGTH_SHORT).show()
