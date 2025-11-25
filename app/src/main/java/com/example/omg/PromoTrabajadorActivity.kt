@@ -19,11 +19,6 @@ class PromoTrabajadorActivity : AppCompatActivity() {
 
         val btnRegresar = findViewById<Button>(R.id.btnRegresar)
 
-        btnConvertirse.setOnClickListener {
-            val intent = Intent(this, FaceValidationActivity::class.java)
-            startActivity(intent)
-        }
-
         btnRegresar.setOnClickListener {
             finish()
         }

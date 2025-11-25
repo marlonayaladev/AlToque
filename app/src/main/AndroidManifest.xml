@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="Splashscreen"
         android:supportsRtl="true"
-        android:theme="@style/Theme.OMG">
+        android:theme="@style/Theme.OMG"
+        android:usesCleartextTraffic="true"> <!-- ✅ Permitir HTTP -->
 
         <!-- API KEY DE GOOGLE MAPS -->
         <meta-data
@@ -56,9 +57,7 @@
         <!-- Nuevas actividades para validación facial -->
         <activity android:name=".PromoTrabajadorActivity" android:exported="true" android:screenOrientation="portrait"/>
         <activity android:name=".FaceValidationActivity" android:exported="true" android:screenOrientation="portrait"/>
-
-        <activity android:name=".FormularioRegistroActivity" android:exported="true" />
-
+        <activity android:name=".FormularioRegistroActivity" android:exported="true"/>
 
     </application>
 

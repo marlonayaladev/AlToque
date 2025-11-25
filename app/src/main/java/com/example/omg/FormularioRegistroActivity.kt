@@ -1,9 +1,7 @@
 package com.example.omg
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.omg.model.Postulante
 import com.example.omg.network.ApiService
@@ -23,16 +21,16 @@ class FormularioRegistroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_formulario_registro)
 
-        // Vincular vistas
+        // Referencias a los campos
         nombreEditText = findViewById(R.id.nombreEditText)
         dniEditText = findViewById(R.id.dniEditText)
         fechaNacimientoEditText = findViewById(R.id.fechaNacimientoEditText)
         correoEditText = findViewById(R.id.correoEditText)
         btnSiguiente = findViewById(R.id.btnSiguiente)
 
-        // Configurar Retrofit
+        // Configuración de Retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8000") // localhost para emulador
+            .baseUrl("http://10.0.2.2:8000") // backend local
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -40,20 +38,47 @@ class FormularioRegistroActivity : AppCompatActivity() {
 
         // Acción del botón
         btnSiguiente.setOnClickListener {
-            val postulante = Postulante(
-                nombre = nombreEditText.text.toString(),
-                dni = dniEditText.text.toString(),
-                fecha_nacimiento = fechaNacimientoEditText.text.toString(),
-                correo = correoEditText.text.toString()
-            )
+            val nombre = nombreEditText.text.toString().trim()
+            val dni = dniEditText.text.toString().trim()
+            val fecha = fechaNacimientoEditText.text.toString().trim()
+            val correo = correoEditText.text.toString().trim()
 
+            // Validaciones básicas
+            if (nombre.isEmpty() || dni.length != 8 ||
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+                Toast.makeText(this, "Completa los campos correctamente", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Crear objeto postulante
+            val postulante = Postulante(nombre, dni, fecha, correo)
+
+            // Enviar datos al backend
             apiService.enviarDatos(postulante).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                    Toast.makeText(this@FormularioRegistroActivity, "Datos enviados correctamente", Toast.LENGTH_SHORT).show()
+                    if (response.isSuccessful) {
+                        Toast.makeText(
+                            this@FormularioRegistroActivity,
+                            "Datos enviados correctamente",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        // 👉 Aquí ya no abrimos FaceValidationActivity
+                        // Solo mostramos confirmación
+                    } else {
+                        Toast.makeText(
+                            this@FormularioRegistroActivity,
+                            "Error en el servidor: ${response.code()}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(this@FormularioRegistroActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@FormularioRegistroActivity,
+                        "Error de conexión: ${t.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             })
         }
