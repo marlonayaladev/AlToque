@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2C2C2C">
+
+    <!-- Pantalla 1: Animación inicial -->
+    <LinearLayout
+        android:id="@+id/layoutAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <!-- Logo Al Toque -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="60dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_logo"
+                android:tint="#00BCD4"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Al toque"
+                android:textColor="#00BCD4"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+        <!-- Círculo animado (como en tu imagen) -->
+        <FrameLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp">
+
+            <!-- Círculo central -->
+            <View
+                android:id="@+id/circlePulse"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_pulse"/>
+
+            <!-- Puntos orbitando (los vamos a animar) -->
+            <ImageView
+                android:id="@+id/dot1"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/circle_background"
+                android:background="#00BCD4"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/dot2"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/circle_background"
+                android:background="#00BCD4"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/dot3"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/circle_background"
+                android:background="#00BCD4"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/dot4"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/circle_background"
+                android:background="#00BCD4"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/dot5"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/circle_background"
+                android:background="#00BCD4"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/dot6"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/circle_background"
+                android:background="#00BCD4"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Preparando tu asistente..."
+            android:textColor="#00BCD4"
+            android:textSize="16sp"
+            android:layout_marginTop="40dp"/>
+
+    </LinearLayout>
+
+    <!-- Pantalla 2: Subir foto y describir problema -->
+    <LinearLayout
+        android:id="@+id/layoutUpload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp">
+
+            <ImageView
+                android:id="@+id/btnClose"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="#00BCD4"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Asistente IA"
+                android:textColor="#00BCD4"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+            <View
+                android:layout_width="32dp"
+                android:layout_height="32dp"/>
+
+        </LinearLayout>
+
+        <!-- Área de foto -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="24dp">
+
+            <!-- Placeholder -->
+            <LinearLayout
+                android:id="@+id/photoPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_photo_placeholder">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_camera"
+                    android:tint="#00BCD4"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Toca para subir una foto\nde tu problema"
+                    android:textColor="#00BCD4"
+                    android:textSize="16sp"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <!-- Foto subida -->
+            <ImageView
+                android:id="@+id/ivUploadedPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_image_preview"
+                android:visibility="gone"/>
+
+            <!-- Botones sobre la foto -->
+            <LinearLayout
+                android:id="@+id/photoActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="bottom"
+                android:padding="16dp"
+                android:background="#CC000000"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/btnTakePhoto"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_camera"
+                    android:background="@drawable/circle_button"
+                    android:padding="12dp"
+                    android:tint="#00BCD4"
+                    android:layout_marginEnd="16dp"/>
+
+                <ImageView
+                    android:id="@+id/btnDeletePhoto"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@android:drawable/ic_menu_delete"
+                    android:background="@drawable/circle_button"
+                    android:padding="12dp"
+                    android:tint="#F44336"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <!-- Campo de descripción -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Describe tu problema (opcional)"
+            android:textColor="#00BCD4"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etProblemDescription"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/bg_edittext"
+            android:hint="Ej: Se me rompió este tubo y no sé qué hacer..."
+            android:textColorHint="#888888"
+            android:textColor="#333333"
+            android:padding="16dp"
+            android:gravity="top"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLines="5"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Botón analizar -->
+        <Button
+            android:id="@+id/btnAnalyze"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Analizar con IA"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_button_cyan"
+            android:enabled="false"/>
+
+    </LinearLayout>
+
+    <!-- Pantalla 3: Analizando -->
+    <LinearLayout
+        android:id="@+id/layoutAnalyzing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:indeterminateTint="#00BCD4"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Analizando tu problema..."
+            android:textColor="#00BCD4"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="La IA está procesando la información"
+            android:textColor="#888888"
+            android:textSize="14sp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <!-- Pantalla 4: Resultado -->
+    <ScrollView
+        android:id="@+id/layoutResult"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp">
+
+                <ImageView
+                    android:id="@+id/btnCloseResult"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="#00BCD4"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Diagnóstico IA"
+                    android:textColor="#00BCD4"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_robot"
+                    android:tint="#00BCD4"/>
+
+            </LinearLayout>
+
+            <!-- Card con resultado -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="#1A1A1A"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📋 Diagnóstico"
+                        android:textColor="#00BCD4"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp"/>
+
+                    <TextView
+                        android:id="@+id/tvAiResponse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Aquí aparecerá la respuesta de la IA..."
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:lineSpacingExtra="4dp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Botones de acción -->
+            <Button
+                android:id="@+id/btnFindProvider"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Buscar profesional"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_button_cyan"
+                android:layout_marginBottom="12dp"/>
+
+            <Button
+                android:id="@+id/btnNewAnalysis"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Nuevo análisis"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:background="@drawable/bg_button_outline_cyan"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

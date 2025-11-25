@@ -66,12 +66,11 @@ class HomeActivity : AppCompatActivity() {
 
 
     private fun setupListeners() {
-        // ❌ QUITAR ESTO (comentado por si lo necesitas después)
         // iconLeft.setOnClickListener {
         //     openSearch()
         // }
 
-        // ✅ SOLO la BARRA abre búsqueda
+        // SOLO la BARRA abre búsqueda
         searchBar.setOnClickListener {
             openSearch()
         }
@@ -83,8 +82,8 @@ class HomeActivity : AppCompatActivity() {
 
 
         iconRight.setOnClickListener {
-            Toast.makeText(this, "Actualizar", Toast.LENGTH_SHORT).show()
-            // TODO: Implementar actualización
+            val intent = Intent(this, AiAssistantActivity::class.java)
+            startActivity(intent)
         }
 
         navHome.setOnClickListener {
