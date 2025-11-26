@@ -58,7 +58,7 @@ class AiAssistantActivity : AppCompatActivity() {
     private lateinit var btnCloseResult: ImageView
 
     private var currentPhotoBitmap: Bitmap? = null
-    private val GEMINI_API_KEY = "AIzaSyAdIBVrImDEcSNLkW8e_56rna77qmz497k"
+    private val GEMINI_API_KEY = "AIzaSyAAxgefsHkI9aeTRCW6sZl0sG6MgpQTKL4"
 
     private val takePictureLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()

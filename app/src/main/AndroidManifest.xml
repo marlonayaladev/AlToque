@@ -24,6 +24,7 @@
         android:usesCleartextTraffic="true"> <!-- ✅ Permitir HTTP -->
 
         <!-- API KEY DE GOOGLE MAPS -->
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA7jWZ-HCdaHaYj2cWu5WtUzf9qIy6uonU"/>

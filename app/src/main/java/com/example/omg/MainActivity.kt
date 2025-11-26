@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al iniciar sesión con Google", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private fun initViews() {

@@ -108,6 +108,7 @@ class HomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+
     // Cargar servicios favoritos desde Firestore
     private fun loadFavoriteServices() {
         val userId = auth.currentUser?.uid ?: return
