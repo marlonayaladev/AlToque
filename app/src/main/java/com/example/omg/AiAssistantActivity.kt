@@ -58,7 +58,7 @@ class AiAssistantActivity : AppCompatActivity() {
     private lateinit var btnCloseResult: ImageView
 
     private var currentPhotoBitmap: Bitmap? = null
-    private val GEMINI_API_KEY = "AIzaSyAAxgefsHkI9aeTRCW6sZl0sG6MgpQTKL4" /* api key */
+    private val GEMINI_API_KEY = "AIzaSyAdIBVrImDEcSNLkW8e_56rna77qmz497k"
 
     private val takePictureLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -121,7 +121,6 @@ class AiAssistantActivity : AppCompatActivity() {
     }
 
     private fun startLoadingAnimation() {
-        // Animación de pulso en el círculo central
         val scaleUp = ObjectAnimator.ofFloat(circlePulse, "scaleX", 1f, 1.2f)
         scaleUp.duration = 1000
         scaleUp.repeatMode = ValueAnimator.REVERSE
@@ -134,10 +133,8 @@ class AiAssistantActivity : AppCompatActivity() {
         scaleUpY.repeatCount = ValueAnimator.INFINITE
         scaleUpY.start()
 
-        // Animar los 6 puntos en órbita circular
         animateOrbitingDots()
 
-        // Después de 2 segundos, mostrar pantalla de subida
         Handler(Looper.getMainLooper()).postDelayed({
             showUploadScreen()
         }, 2000)
@@ -197,7 +194,6 @@ class AiAssistantActivity : AppCompatActivity() {
         }
 
         btnFindProvider.setOnClickListener {
-            // Ir a búsqueda de proveedores
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
@@ -258,16 +254,7 @@ class AiAssistantActivity : AppCompatActivity() {
 
     private suspend fun callGeminiAPI(userDescription: String): String {
         return try {
-            // Verificar que el API Key esté configurado
-            if (GEMINI_API_KEY == "TU_API_KEY_AQUI" || GEMINI_API_KEY.isEmpty()) {
-                return "❌ Error: No has configurado tu API Key de Gemini.\n\n" +
-                        "Por favor:\n" +
-                        "1. Ve a https://aistudio.google.com/app/apikey\n" +
-                        "2. Crea un API Key\n" +
-                        "3. Cópialo en AiAssistantActivity.kt línea 66"
-            }
-
-            val url = URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$GEMINI_API_KEY")
+            val url = URL("https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=$GEMINI_API_KEY")
             val connection = url.openConnection() as HttpURLConnection
 
             connection.requestMethod = "POST"
@@ -276,27 +263,23 @@ class AiAssistantActivity : AppCompatActivity() {
             connection.connectTimeout = 30000
             connection.readTimeout = 30000
 
-            // Crear prompt
             val prompt = buildPrompt(userDescription)
 
-            // Crear JSON request
             val jsonRequest = JSONObject()
             val contents = JSONArray()
             val content = JSONObject()
             val parts = JSONArray()
 
-            // Agregar imagen si existe
             if (currentPhotoBitmap != null) {
                 val imageBase64 = bitmapToBase64(currentPhotoBitmap!!)
                 val imagePart = JSONObject()
                 val inlineData = JSONObject()
                 inlineData.put("mime_type", "image/jpeg")
                 inlineData.put("data", imageBase64)
-                imagePart.put("inline_data", inlineData)
+                imagePart.put("inlineData", inlineData)
                 parts.put(imagePart)
             }
 
-            // Agregar texto
             val textPart = JSONObject()
             textPart.put("text", prompt)
             parts.put(textPart)
@@ -305,21 +288,19 @@ class AiAssistantActivity : AppCompatActivity() {
             contents.put(content)
             jsonRequest.put("contents", contents)
 
-            android.util.Log.d("AiAssistant", "Request JSON: ${jsonRequest.toString()}")
+            android.util.Log.d("AiAssistant", "URL: ${url}")
+            android.util.Log.d("AiAssistant", "Request: ${jsonRequest.toString()}")
 
-            // Enviar request
             val outputStream = connection.outputStream
             outputStream.write(jsonRequest.toString().toByteArray())
             outputStream.close()
 
-            // Leer response
             val responseCode = connection.responseCode
             android.util.Log.d("AiAssistant", "Response code: $responseCode")
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 val inputStream = connection.inputStream
                 val response = inputStream.bufferedReader().use { it.readText() }
-                android.util.Log.d("AiAssistant", "Response: $response")
 
                 val jsonResponse = JSONObject(response)
                 val candidates = jsonResponse.getJSONArray("candidates")
@@ -330,20 +311,14 @@ class AiAssistantActivity : AppCompatActivity() {
 
                 text
             } else {
-                // Leer error
                 val errorStream = connection.errorStream
                 val errorResponse = errorStream?.bufferedReader()?.use { it.readText() } ?: "Sin detalles"
-                android.util.Log.e("AiAssistant", "Error response: $errorResponse")
-
-                "❌ Error al conectar con la IA.\n\nCódigo: $responseCode\n\nPosibles causas:\n" +
-                        "• API Key inválida o sin permisos\n" +
-                        "• Límite de uso alcanzado\n" +
-                        "• Verifica tu API Key en:\n" +
-                        "https://aistudio.google.com/app/apikey"
+                android.util.Log.e("AiAssistant", "Error: $errorResponse")
+                "Error $responseCode: $errorResponse"
             }
         } catch (e: Exception) {
             android.util.Log.e("AiAssistant", "Exception", e)
-            "❌ Error: ${e.message}\n\nRevisa tu conexión a Internet y tu API Key."
+            "Error: ${e.message}"
         }
     }
 
