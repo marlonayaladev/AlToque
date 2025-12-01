@@ -11,21 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
 import android.widget.ImageView
 
+class ProviderDetailActivity : AppCompatActivity() {
 
-class ProviderDetailActivity : AppCompatActivity(), OnMapReadyCallback {
-
-    private lateinit var googleMap: GoogleMap
     private lateinit var btnBack: ImageButton
     private lateinit var ivProviderPhoto: ImageView
     private lateinit var tvProviderName: TextView
@@ -58,11 +47,6 @@ class ProviderDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Inicializar vistas
         initViews()
-
-        // Configurar mapa
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
 
         // Configurar listeners
         setupListeners()
@@ -169,44 +153,5 @@ class ProviderDetailActivity : AppCompatActivity(), OnMapReadyCallback {
                 .placeholder(R.drawable.ic_user)
                 .into(ivProviderPhoto)
         }
-    }
-
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-
-        val userLocation = LatLng(userLat, userLng)
-        val providerLocation = LatLng(providerLat, providerLng)
-
-        // Marcador del usuario (rojo)
-        googleMap.addMarker(
-            MarkerOptions()
-                .position(userLocation)
-                .title("Tu ubicación")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-        )
-
-        // Marcador del proveedor (verde)
-        googleMap.addMarker(
-            MarkerOptions()
-                .position(providerLocation)
-                .title(intent.getStringExtra("PROVIDER_NAME"))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        )
-
-        // Línea entre usuario y proveedor
-        googleMap.addPolyline(
-            PolylineOptions()
-                .add(userLocation, providerLocation)
-                .color(0xFF00BCD4.toInt())
-                .width(8f)
-        )
-
-        // Ajustar cámara para mostrar ambos puntos
-        val bounds = LatLngBounds.Builder()
-            .include(userLocation)
-            .include(providerLocation)
-            .build()
-
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
     }
 }

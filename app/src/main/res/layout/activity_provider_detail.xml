@@ -5,12 +5,19 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
-    <!-- Mapa -->
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <!-- Mapa Placeholder -->
+    <FrameLayout
+        android:id="@+id/mapPlaceholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="#E0E0E0">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Mapa no disponible"
+            android:textColor="#757575"/>
+    </FrameLayout>
 
     <!-- Botón volver -->
     <ImageButton
@@ -21,7 +28,7 @@
         android:layout_marginTop="48dp"
         android:background="@drawable/bg_circle_white"
         android:src="@drawable/ic_arrow_back"
-        android:tint="#333333"/>
+        app:tint="#333333"/>
 
     <!-- Card del proveedor (parte inferior) -->
     <androidx.cardview.widget.CardView

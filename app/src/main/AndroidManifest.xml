@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -22,12 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OMG"
         android:usesCleartextTraffic="true"> <!-- ✅ Permitir HTTP -->
-
-        <!-- API KEY DE GOOGLE MAPS -->
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA7jWZ-HCdaHaYj2cWu5WtUzf9qIy6uonU"/>
 
         <!-- SplashActivity como pantalla inicial -->
         <activity
@@ -60,6 +53,7 @@
         <activity android:name=".PromoTrabajadorActivity" android:exported="true" android:screenOrientation="portrait"/>
         <activity android:name=".FaceValidationActivity" android:exported="true" android:screenOrientation="portrait"/>
         <activity android:name=".FormularioRegistroActivity" android:exported="true"/>
+        <activity android:name=".TrabajadorHomeActivity" android:exported="false" android:screenOrientation="portrait"/>
 
         <activity
             android:name=".AiAssistantActivity"

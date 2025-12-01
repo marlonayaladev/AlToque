@@ -1,5 +1,6 @@
 package com.example.omg
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,8 +8,13 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.omg.model.EstadoResponse
+import com.example.omg.network.RetrofitClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeActivity : AppCompatActivity() {
 
@@ -56,21 +62,15 @@ class HomeActivity : AppCompatActivity() {
         navProfile = findViewById(R.id.navProfile)
         navNotifications = findViewById(R.id.navNotifications)
         animatedCirclesView = findViewById(R.id.animatedCirclesView)
-
-        // Acción directa desde initViews (opcional)
-        iconLeft.setOnClickListener {
-            val intent = Intent(this, PromoTrabajadorActivity::class.java)
-            startActivity(intent)
-        }
     }
 
 
     private fun setupListeners() {
-        // iconLeft.setOnClickListener {
-        //     openSearch()
-        // }
+        // Listener para el ícono de "Modo Trabajador"
+        iconLeft.setOnClickListener {
+            checkUserStatusAndNavigate()
+        }
 
-        // SOLO la BARRA abre búsqueda
         searchBar.setOnClickListener {
             openSearch()
         }
@@ -82,8 +82,8 @@ class HomeActivity : AppCompatActivity() {
 
 
         iconRight.setOnClickListener {
-            val intent = Intent(this, AiAssistantActivity::class.java)
-            startActivity(intent)
+            Toast.makeText(this, "Actualizar", Toast.LENGTH_SHORT).show()
+            // TODO: Implementar actualización
         }
 
         navHome.setOnClickListener {
@@ -103,13 +103,51 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkUserStatusAndNavigate() {
+        var correo = auth.currentUser?.email
+
+        if (correo.isNullOrEmpty()) {
+            val prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+            correo = prefs.getString("correo_postulante", null)
+        }
+
+        if (correo.isNullOrEmpty()) {
+            // Si no hay correo, no es trabajador. Va a la promo.
+            startActivity(Intent(this, PromoTrabajadorActivity::class.java))
+            return
+        }
+
+        val apiService = RetrofitClient.instance
+        apiService.verificarEstado(correo).enqueue(object : Callback<EstadoResponse> {
+            override fun onResponse(call: Call<EstadoResponse>, response: Response<EstadoResponse>) {
+                if (response.isSuccessful) {
+                    val estado = response.body()?.estado
+                    if (estado == "admitido") {
+                        // Si es admitido, va directo al Home del Trabajador
+                        startActivity(Intent(this@HomeActivity, TrabajadorHomeActivity::class.java))
+                    } else {
+                        // Para cualquier otro estado, va a la pantalla de promo que gestionará el flujo
+                        startActivity(Intent(this@HomeActivity, PromoTrabajadorActivity::class.java))
+                    }
+                } else {
+                    // En caso de error, fallback a la pantalla de promo
+                    startActivity(Intent(this@HomeActivity, PromoTrabajadorActivity::class.java))
+                }
+            }
+
+            override fun onFailure(call: Call<EstadoResponse>, t: Throwable) {
+                Toast.makeText(this@HomeActivity, "Error de conexión: ${t.message}", Toast.LENGTH_LONG).show()
+                // En caso de fallo, fallback a la pantalla de promo
+                startActivity(Intent(this@HomeActivity, PromoTrabajadorActivity::class.java))
+            }
+        })
+    }
+
     private fun openSearch() {
         val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
     }
 
-
-    // Cargar servicios favoritos desde Firestore
     private fun loadFavoriteServices() {
         val userId = auth.currentUser?.uid ?: return
 
@@ -121,7 +159,6 @@ class HomeActivity : AppCompatActivity() {
                     val favoriteServices = document.get("favoriteServices") as? List<String>
 
                     if (!favoriteServices.isNullOrEmpty()) {
-                        // Pasar los servicios a la vista de las bolas
                         animatedCirclesView.setFavoriteServices(favoriteServices)
                         Log.d("HomeActivity", "Servicios cargados: $favoriteServices")
                     }
@@ -133,7 +170,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        // Preguntar si quiere cerrar sesión
         super.onBackPressed()
         finishAffinity() // Cerrar todas las actividades
     }

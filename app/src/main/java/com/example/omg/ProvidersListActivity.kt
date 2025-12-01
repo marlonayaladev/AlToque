@@ -9,17 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ProvidersListActivity : AppCompatActivity(), OnMapReadyCallback {
+class ProvidersListActivity : AppCompatActivity() {
 
-    private lateinit var googleMap: GoogleMap
     private lateinit var btnBack: ImageButton
     private lateinit var tvServiceName: TextView
     private lateinit var tvProvidersCount: TextView
@@ -50,11 +43,6 @@ class ProvidersListActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Configurar RecyclerView
         setupRecyclerView()
-
-        // Configurar mapa
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
 
         // Configurar listeners
         setupListeners()
@@ -107,28 +95,6 @@ class ProvidersListActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-
-        // Ubicación del usuario
-        val userLocation = LatLng(userLat, userLng)
-
-        // Agregar marcador del usuario
-        googleMap.addMarker(
-            MarkerOptions()
-                .position(userLocation)
-                .title("Tu ubicación")
-        )
-
-        // Mover cámara
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f))
-
-        // ✅ AHORA SÍ agregar los marcadores de proveedores (después de que el mapa esté listo)
-        if (providersList.isNotEmpty()) {
-            addProvidersToMap()
-        }
-    }
-
     private fun loadProviders() {
         progressBar.visibility = View.VISIBLE
 
@@ -142,11 +108,6 @@ class ProvidersListActivity : AppCompatActivity(), OnMapReadyCallback {
 
         tvProvidersCount.text = "${providersList.size} proveedores cercanos"
         progressBar.visibility = View.GONE
-
-        // ✅ SOLO agregar marcadores si el mapa YA está listo
-        if (::googleMap.isInitialized) {
-            addProvidersToMap()
-        }
     }
 
     private fun getMockProviders(): List<Provider> {
@@ -224,17 +185,5 @@ class ProvidersListActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun createMockProviders() {
         // Esta función simula crear proveedores en Firestore
         // TODO: Implementar cuando tengas el panel de administración
-    }
-
-    private fun addProvidersToMap() {
-        for (provider in providersList) {
-            val position = LatLng(provider.latitude, provider.longitude)
-            googleMap.addMarker(
-                MarkerOptions()
-                    .position(position)
-                    .title(provider.name)
-                    .snippet("${provider.rating}⭐ - ${provider.arrivalTime}")
-            )
-        }
     }
 }

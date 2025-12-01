@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -15,23 +16,18 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import java.util.Locale
 
-class LocationConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
+class LocationConfirmationActivity : AppCompatActivity() {
 
-    private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var btnBack: ImageButton
     private lateinit var btnConfirm: View
     private lateinit var btnChange: View
     private lateinit var tvAddress: TextView
 
-    private var currentLocation: LatLng? = null
+    private var currentLat: Double = 0.0
+    private var currentLng: Double = 0.0
     private var selectedService: String = ""
 
     companion object {
@@ -52,13 +48,11 @@ class LocationConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
         // Inicializar ubicación
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // Configurar mapa
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
         // Configurar listeners
         setupListeners()
+
+        // Solicitar permisos y obtener ubicación
+        checkLocationPermission()
     }
 
     private fun initViews() {
@@ -74,12 +68,12 @@ class LocationConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         btnConfirm.setOnClickListener {
-            if (currentLocation != null) {
+            if (currentLat != 0.0 && currentLng != 0.0) {
                 // Ir a la lista de proveedores
                 val intent = Intent(this, ProvidersListActivity::class.java).apply {
                     putExtra("SERVICE_NAME", selectedService)
-                    putExtra("LATITUDE", currentLocation!!.latitude)
-                    putExtra("LONGITUDE", currentLocation!!.longitude)
+                    putExtra("LATITUDE", currentLat)
+                    putExtra("LONGITUDE", currentLng)
                 }
                 startActivity(intent)
                 finish()
@@ -93,27 +87,13 @@ class LocationConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-
-        // Configurar el mapa
-        googleMap.uiSettings.apply {
-            isZoomControlsEnabled = true
-            isCompassEnabled = true
-            isMyLocationButtonEnabled = true
-        }
-
-        // Solicitar permisos y obtener ubicación
-        checkLocationPermission()
-    }
-
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            enableMyLocation()
+            getLocation()
         } else {
             // Solicitar permisos
             ActivityCompat.requestPermissions(
@@ -127,44 +107,36 @@ class LocationConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun enableMyLocation() {
+    private fun getLocation() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            googleMap.isMyLocationEnabled = true
-
             // Obtener ubicación actual
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
-                    currentLocation = LatLng(location.latitude, location.longitude)
-
-                    // Mover cámara a la ubicación
-                    googleMap.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(currentLocation!!, 15f)
-                    )
+                    currentLat = location.latitude
+                    currentLng = location.longitude
 
                     // Obtener dirección
-                    getAddressFromLocation(currentLocation!!)
+                    getAddressFromLocation(currentLat, currentLng)
                 } else {
                     // Ubicación por defecto (San Isidro, Lima)
-                    currentLocation = LatLng(-12.0931, -77.0465)
-                    googleMap.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(currentLocation!!, 15f)
-                    )
-                    tvAddress.text = "San Isidro, Lima, Perú"
+                    currentLat = -12.0931
+                    currentLng = -77.0465
+                    tvAddress.text = "San Isidro, Lima, Perú (Ubicación por defecto)"
                 }
             }
         }
     }
 
-    private fun getAddressFromLocation(latLng: LatLng) {
+    private fun getAddressFromLocation(lat: Double, lng: Double) {
         try {
             val geocoder = Geocoder(this, Locale.getDefault())
             val addresses: List<Address>? = geocoder.getFromLocation(
-                latLng.latitude,
-                latLng.longitude,
+                lat,
+                lng,
                 1
             )
 
@@ -199,7 +171,7 @@ class LocationConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                enableMyLocation()
+                getLocation()
             } else {
                 Toast.makeText(
                     this,

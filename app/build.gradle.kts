@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services")  // ← AGREGADO FIREBASE
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -50,42 +50,30 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-
-
     // Lottie
     implementation("com.airbnb.android:lottie:6.1.0")
 
-    // Firebase BoM - Gestiona versiones automáticamente
+    // Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
 
-    // Firebase Authentication (SIN -ktx)
+    // Firebase Authentication
     implementation("com.google.firebase:firebase-auth")
 
-    // Firebase Firestore (SIN -ktx)
+    // Firebase Firestore
     implementation("com.google.firebase:firebase-firestore")
 
-    // Google Play Services para Google Sign-In
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
-    // Firebase Storage para fotos
+    // Firebase Storage
     implementation("com.google.firebase:firebase-storage")
     
     // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
-
-    // Google Maps
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    // Google Maps RETIRADO
+    // implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
-    // Para cargar imágenes de perfil
+    // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
-
-    // Glide para cargar imágenes
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-
-    // Lottie
-    implementation("com.airbnb.android:lottie:6.1.0")
 
     // CardView
     implementation("androidx.cardview:cardview:1.0.0")
@@ -98,11 +86,5 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-
 
 }
