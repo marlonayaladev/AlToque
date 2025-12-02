@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,6 +44,9 @@ class ProvidersListActivity : AppCompatActivity(), OnMapReadyCallback {
         serviceName = intent.getStringExtra("SERVICE_NAME") ?: "Servicio"
         userLat = intent.getDoubleExtra("LATITUDE", -12.0931)
         userLng = intent.getDoubleExtra("LONGITUDE", -77.0465)
+
+        // --- PRUEBA DE DIAGNÓSTICO ---
+        Toast.makeText(this, "Recibido: Lat:$userLat, Lng:$userLng", Toast.LENGTH_LONG).show()
 
         // Inicializar Firebase
         db = FirebaseFirestore.getInstance()
@@ -131,6 +136,17 @@ class ProvidersListActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun updateMapMarkers() {
         googleMap?.clear()
         val userLocation = LatLng(userLat, userLng)
+
+        // Añadir marcador para la ubicación del usuario (VERDE y ENCIMA de otros)
+        googleMap?.addMarker(
+            MarkerOptions()
+                .position(userLocation)
+                .title("Tu ubicación")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .zIndex(1.0f) // Asegura que esté por encima de los demás
+        )
+
+        // Añadir marcadores para los proveedores
         providersList.forEach { provider ->
             val providerLocation = LatLng(provider.latitude, provider.longitude)
             googleMap?.addMarker(
