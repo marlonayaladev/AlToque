@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -16,18 +15,23 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import java.util.Locale
 
-class LocationConfirmationActivity : AppCompatActivity() {
+class LocationConfirmationActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private lateinit var googleMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var btnBack: ImageButton
     private lateinit var btnConfirm: View
     private lateinit var btnChange: View
     private lateinit var tvAddress: TextView
 
-    private var currentLat: Double = 0.0
-    private var currentLng: Double = 0.0
+    private var currentLocation: LatLng? = null
     private var selectedService: String = ""
 
     companion object {
@@ -48,11 +52,13 @@ class LocationConfirmationActivity : AppCompatActivity() {
         // Inicializar ubicación
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        // Configurar mapa
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.mapFragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
         // Configurar listeners
         setupListeners()
-
-        // Solicitar permisos y obtener ubicación
-        checkLocationPermission()
     }
 
     private fun initViews() {
@@ -68,12 +74,12 @@ class LocationConfirmationActivity : AppCompatActivity() {
         }
 
         btnConfirm.setOnClickListener {
-            if (currentLat != 0.0 && currentLng != 0.0) {
+            if (currentLocation != null) {
                 // Ir a la lista de proveedores
                 val intent = Intent(this, ProvidersListActivity::class.java).apply {
                     putExtra("SERVICE_NAME", selectedService)
-                    putExtra("LATITUDE", currentLat)
-                    putExtra("LONGITUDE", currentLng)
+                    putExtra("LATITUDE", currentLocation!!.latitude)
+                    putExtra("LONGITUDE", currentLocation!!.longitude)
                 }
                 startActivity(intent)
                 finish()
@@ -87,13 +93,27 @@ class LocationConfirmationActivity : AppCompatActivity() {
         }
     }
 
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+
+        // Configurar el mapa
+        googleMap.uiSettings.apply {
+            isZoomControlsEnabled = true
+            isCompassEnabled = true
+            isMyLocationButtonEnabled = true
+        }
+
+        // Solicitar permisos y obtener ubicación
+        checkLocationPermission()
+    }
+
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            getLocation()
+            enableMyLocation()
         } else {
             // Solicitar permisos
             ActivityCompat.requestPermissions(
@@ -107,36 +127,44 @@ class LocationConfirmationActivity : AppCompatActivity() {
         }
     }
 
-    private fun getLocation() {
+    private fun enableMyLocation() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            googleMap.isMyLocationEnabled = true
+
             // Obtener ubicación actual
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
-                    currentLat = location.latitude
-                    currentLng = location.longitude
+                    currentLocation = LatLng(location.latitude, location.longitude)
+
+                    // Mover cámara a la ubicación
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(currentLocation!!, 15f)
+                    )
 
                     // Obtener dirección
-                    getAddressFromLocation(currentLat, currentLng)
+                    getAddressFromLocation(currentLocation!!)
                 } else {
                     // Ubicación por defecto (San Isidro, Lima)
-                    currentLat = -12.0931
-                    currentLng = -77.0465
-                    tvAddress.text = "San Isidro, Lima, Perú (Ubicación por defecto)"
+                    currentLocation = LatLng(-12.0931, -77.0465)
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(currentLocation!!, 15f)
+                    )
+                    tvAddress.text = "San Isidro, Lima, Perú"
                 }
             }
         }
     }
 
-    private fun getAddressFromLocation(lat: Double, lng: Double) {
+    private fun getAddressFromLocation(latLng: LatLng) {
         try {
             val geocoder = Geocoder(this, Locale.getDefault())
             val addresses: List<Address>? = geocoder.getFromLocation(
-                lat,
-                lng,
+                latLng.latitude,
+                latLng.longitude,
                 1
             )
 
@@ -171,7 +199,7 @@ class LocationConfirmationActivity : AppCompatActivity() {
 
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLocation()
+                enableMyLocation()
             } else {
                 Toast.makeText(
                     this,

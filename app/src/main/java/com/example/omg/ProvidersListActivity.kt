@@ -9,15 +9,23 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ProvidersListActivity : AppCompatActivity() {
+class ProvidersListActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var btnBack: ImageButton
     private lateinit var tvServiceName: TextView
     private lateinit var tvProvidersCount: TextView
     private lateinit var rvProviders: RecyclerView
     private lateinit var progressBar: ProgressBar
+    private lateinit var mapView: MapView
+    private var googleMap: GoogleMap? = null
 
     private lateinit var db: FirebaseFirestore
     private var serviceName: String = ""
@@ -41,6 +49,10 @@ class ProvidersListActivity : AppCompatActivity() {
         // Inicializar vistas
         initViews()
 
+        // Configurar MapView
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(this)
+
         // Configurar RecyclerView
         setupRecyclerView()
 
@@ -57,6 +69,7 @@ class ProvidersListActivity : AppCompatActivity() {
         tvProvidersCount = findViewById(R.id.tvProvidersCount)
         rvProviders = findViewById(R.id.rvProviders)
         progressBar = findViewById(R.id.progressBar)
+        mapView = findViewById(R.id.mapView)
 
         tvServiceName.text = serviceName
     }
@@ -108,6 +121,75 @@ class ProvidersListActivity : AppCompatActivity() {
 
         tvProvidersCount.text = "${providersList.size} proveedores cercanos"
         progressBar.visibility = View.GONE
+
+        // Actualizar el mapa si ya está listo
+        googleMap?.let {
+            updateMapMarkers()
+        }
+    }
+    
+    private fun updateMapMarkers() {
+        googleMap?.clear()
+        val userLocation = LatLng(userLat, userLng)
+        providersList.forEach { provider ->
+            val providerLocation = LatLng(provider.latitude, provider.longitude)
+            googleMap?.addMarker(
+                MarkerOptions()
+                    .position(providerLocation)
+                    .title(provider.name)
+                    .snippet(provider.service)
+            )
+        }
+        googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f))
+    }
+
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        map.uiSettings.isZoomControlsEnabled = true
+
+        val userLocation = LatLng(userLat, userLng)
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14f))
+
+        // Si los proveedores ya se cargaron, pintarlos en el mapa
+        if (providersList.isNotEmpty()) {
+            updateMapMarkers()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+    
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
     }
 
     private fun getMockProviders(): List<Provider> {
