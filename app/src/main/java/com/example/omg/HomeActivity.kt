@@ -82,8 +82,8 @@ class HomeActivity : AppCompatActivity() {
 
 
         iconRight.setOnClickListener {
-            Toast.makeText(this, "Actualizar", Toast.LENGTH_SHORT).show()
-            // TODO: Implementar actualización
+            val intent = Intent(this, AiAssistantActivity::class.java)
+            startActivity(intent)
         }
 
         navHome.setOnClickListener {
